@@ -55,4 +55,9 @@ async function fetchWeatherData() {
     }
 }
 
+// Met à jour l'étiquette du nombre de jours en fonction de la valeur du curseur
+function updateDaysLabel(value) {
+    document.getElementById('days-label').textContent = `${value} jour${value > 1 ? 's' : ''}`;
+}
+
 
