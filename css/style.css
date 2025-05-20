@@ -85,10 +85,57 @@ button:focus {
 /* SECTION DES RÉSULTATS    */
 /* ========================= */
 .result {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Grille responsive */
+    gap: 1.5rem; /* Espacement entre les cartes */
     margin-top: 2rem; /* Espacement au-dessus */
+    padding: 1rem; /* Espacement interne */
 }
 
+/* Conteneur des cartes météo */
+/* Style des cartes */
+.weather-card {
+    background-color: var(--white); /* Fond blanc */
+    border: 1px solid #ddd; /* Bordure grise légère */
+    border-radius: 10px; /* Coins arrondis */
+    padding: 1.5rem; /* Espacement interne */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    text-align: center; /* Centrage du contenu */
+    transition: transform 0.2s, box-shadow 0.2s; /* Transition pour hover */
+}
 
+.weather-card:hover {
+    transform: translateY(-5px); /* Légère élévation au survol */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+}
+
+/* Titre de la carte */
+.weather-card h3 {
+    font-size: 1.4rem; /* Taille du titre */
+    margin-bottom: 1rem; /* Espacement sous le titre */
+    color: var(--text-color); /* Couleur du texte */
+}
+
+/* Icône météo */
+.weather-card .icon {
+    font-size: 3rem; /* Taille de l'icône */
+    margin: 1rem 0; /* Espacement autour de l'icône */
+    color: var(--blue); /* Couleur principale */
+}
+
+/* Informations météo */
+.weather-card p {
+    margin: 0.5rem 0; /* Espacement entre les paragraphes */
+    font-size: 1rem; /* Taille du texte */
+    color: #555; /* Couleur grise pour le texte */
+}
+
+/* Responsive : Ajustement pour petits écrans */
+@media (max-width: 600px) {
+    .result {
+        grid-template-columns: 1fr; /* Une seule colonne sur petits écrans */
+    }
+}
 
 /* ========================= */
 /* EFFETS FOCUS             */
