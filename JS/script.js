@@ -5,59 +5,62 @@ const apiMeteoToken = "726b1c99c171e7c9d93155a0b1721f138a48d4c33ad10e533f84fbbd5
  * Fonction principale pour récupérer et afficher la météo
  */
 async function fetchWeatherData() {
-    // Récupère la valeur du code postal entré par l'utilisateur
     const postalCode = document.getElementById("postal-code").value.trim();
-    // Sélectionne l'élément où les résultats seront affichés
+    const days = document.getElementById("forecast-days").value; // Nombre de jours sélectionnés
     const weatherResultContainer = document.getElementById("weather-result");
+    weatherResultContainer.innerHTML = "Chargement...";
 
     try {
-        // Appel à l'API pour récupérer les informations géographiques à partir du code postal
+        // Appel à l'API géographique pour récupérer les coordonnées de la commune
         const geoApiResponse = await fetch(`https://geo.api.gouv.fr/communes?codePostal=${postalCode}&fields=nom,centre&format=json`);
         const geoData = await geoApiResponse.json();
 
-        // Vérifie si aucune commune n'a été trouvée pour le code postal donné
         if (!geoData.length) {
             weatherResultContainer.innerHTML = "<p>Aucune commune trouvée pour ce code postal.</p>";
             return;
         }
 
-        // Récupère le nom et les coordonnées de la première commune trouvée a partir de la réponse de l'API 
-        const { nom: cityName, centre: cityCoordinates } = geoData[0];
-        const [longitude, latitude] = cityCoordinates.coordinates;
+        const { nom: cityName, centre: { coordinates: [longitude, latitude] } } = geoData[0];
 
-        // Appel à l'API météo pour récupérer les prévisions à partir des coordonnées
+        // Appel à l'API météo pour récupérer les prévisions
         const weatherApiResponse = await fetch(`https://api.meteo-concept.com/api/forecast/daily?token=${apiMeteoToken}&latlng=${latitude},${longitude}`);
         const weatherData = await weatherApiResponse.json();
-        const todayWeather = weatherData.forecast[0]; // Données météo pour aujourd'hui
 
-        // Extraction des données météo importantes
-        const minTemperature = todayWeather.tmin; // Température minimale
-        const maxTemperature = todayWeather.tmax; // Température maximale
-        const averageTemperature = ((minTemperature + maxTemperature) / 2); // Moyenne des températures
-        const rainProbability = todayWeather.probarain ?? "N/A"; // Probabilité de pluie
-        const sunHours = todayWeather.sun_hours ?? "N/A"; // Heures d'ensoleillement
-
-        // Affiche les résultats météo dans le conteneur
-        weatherResultContainer.innerHTML = `
-  <h2>Météo pour ${cityName}</h2>
-  <ul>
-    <li><strong>🌡️ Température minimale :</strong> ${minTemperature}°C</li>
-    <li><strong>🌡️ Température maximale :</strong> ${maxTemperature}°C</li>
-    <li><strong>🌡️ Moyenne estimée :</strong> ${averageTemperature}°C</li>
-    <li><strong>☔ Probabilité de pluie :</strong> ${rainProbability}%</li>
-    <li><strong>☀️ Heures d'ensoleillement :</strong> ${sunHours} h</li>
-  </ul>
-`;
+        // Génération des cartes météo en fonction du nombre de jours sélectionnés
+        weatherResultContainer.innerHTML = weatherData.forecast
+            .slice(0, days) // Limite au nombre de jours sélectionnés
+            .map((day, index) => `
+                <div class="weather-card">
+                    <h3>Jour ${index + 1}</h3>
+                    <div class="icon">${getWeatherIcon(day.weather)}</div>
+                    <p><strong>Temp. Min :</strong> ${day.tmin}°C</p>
+                    <p><strong>Temp. Max :</strong> ${day.tmax}°C</p>
+                    <p><strong>Pluie :</strong> ${day.probarain ?? "N/A"}%</p>
+                </div>
+            `)
+            .join("");
     } catch (error) {
-        // En cas d'erreur, affiche un message d'erreur et log l'erreur dans la console
-        console.error(error);
         weatherResultContainer.innerHTML = "<p>Erreur lors de la récupération des données météo.</p>";
+        console.error(error);
     }
 }
 
-// Met à jour l'étiquette du nombre de jours en fonction de la valeur du curseur
-function updateDaysLabel(value) {
-    document.getElementById('days-label').textContent = `${value} jour${value > 1 ? 's' : ''}`;
+// Fonction pour obtenir une icône météo en fonction du code météo
+function getWeatherIcon(weatherCode) {
+    const icons = {
+        0: "☀️", // Soleil
+        1: "🌤️", // Peu nuageux
+        2: "⛅", // Partiellement nuageux
+        3: "☁️", // Nuageux
+        4: "🌧️", // Pluie
+        5: "⛈️", // Orage
+        6: "❄️", // Neige
+    };
+    return icons[weatherCode] || "❓"; // Icône par défaut si le code est inconnu
 }
 
+// Fonction pour mettre à jour l'étiquette du curseur
+function updateDaysLabel(value) {
+    document.getElementById("days-label").textContent = `${value} jour${value > 1 ? "s" : ""}`;
+}
 
