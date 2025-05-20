@@ -30,6 +30,20 @@
                 placeholder="Ex : 75001" 
             />
             <small id="postal-code-help">Entrez un code postal français à 5 chiffres.</small>
+
+            <!-- Curseur pour choisir le nombre de jours -->
+            <label for="forecast-days">Nombre de jours :</label>
+            <input 
+                type="range" 
+                id="forecast-days" 
+                name="forecast-days" 
+                min="1" 
+                max="14" 
+                value="7" 
+                oninput="updateDaysLabel(this.value)" 
+            />
+            <span id="days-label">7 jours</span>
+
             <button type="submit">Obtenir la météo</button>
         </form>
 
