@@ -26,6 +26,8 @@ async function fetchWeatherData() {
         const weatherApiResponse = await fetch(`https://api.meteo-concept.com/api/forecast/daily?token=${apiMeteoToken}&latlng=${latitude},${longitude}`);
         const weatherData = await weatherApiResponse.json();
 
+
+
         // Génération du titre et des cartes météo
         weatherResultContainer.innerHTML = `
             <h1>Météo de ${cityName} pour ${days} jour${days > 1 ? "s" : ""}</h1>
@@ -35,7 +37,7 @@ async function fetchWeatherData() {
                     .map((day, index) => `
                         <div class="weather-card">
                             <h3>Jour ${index + 1}</h3>
-                            <div class="icon">${getWeatherIcon(day.weather)}</div>
+                            <div class="icon"></div>
                             <p><strong>Temp. Min :</strong> ${day.tmin}°C</p>
                             <p><strong>Temp. Max :</strong> ${day.tmax}°C</p>
                             <p><strong>Pluie :</strong> ${day.probarain ?? "N/A"}%</p>
@@ -51,25 +53,5 @@ async function fetchWeatherData() {
     }
 }
 
-// Fonction pour obtenir une animation météo en fonction du code météo
-function getWeatherIcon(weatherCode) {
-    const icons = {
-        0: "sun.gif", // Soleil
-        1: "partly-cloudy-day.gif", // Peu nuageux
-        2: "cloudy.png", // Nuageux
-        3: "rain.gif", // Pluie
-        4: "light-drizzle.gif", // quelques gouttes
-        5: "cloud-lightning.gif", // Orage
-        6: "snow.gif", // Neige
-        7: "windy-weather.gif", // Vent
-    };
 
-    const iconPath = icons[weatherCode] || "unknown.gif"; // Icône par défaut si le code est inconnu
-    return `<img src="./img/${iconPath}" alt="Météo animée" class="weather-icon" />`;
-}
-
-// Fonction pour mettre à jour l'étiquette du curseur
-function updateDaysLabel(value) {
-    document.getElementById("days-label").textContent = `${value} jour${value > 1 ? "s" : ""}`;
-}
 
