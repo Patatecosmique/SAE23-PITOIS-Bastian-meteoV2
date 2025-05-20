@@ -58,7 +58,7 @@ function getWeatherIcon(weatherCode) {
         1: "partly-cloudy-day.gif", // Peu nuageux
         2: "cloudy.png", // Nuageux
         3: "rain.gif", // Pluie
-        4: "light-drizzle.gif", // Bruine légère
+        4: "light-drizzle.gif", // quelques gouttes
         5: "cloud-lightning.gif", // Orage
         6: "snow.gif", // Neige
         7: "windy-weather.gif", // Vent
