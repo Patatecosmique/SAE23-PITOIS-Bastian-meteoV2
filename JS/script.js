@@ -26,19 +26,25 @@ async function fetchWeatherData() {
         const weatherApiResponse = await fetch(`https://api.meteo-concept.com/api/forecast/daily?token=${apiMeteoToken}&latlng=${latitude},${longitude}`);
         const weatherData = await weatherApiResponse.json();
 
-        // Génération des cartes météo en fonction du nombre de jours sélectionnés
-        weatherResultContainer.innerHTML = weatherData.forecast
-            .slice(0, days) // Limite au nombre de jours sélectionnés
-            .map((day, index) => `
-                <div class="weather-card">
-                    <h3>Jour ${index + 1}</h3>
-                    <div class="icon">${getWeatherIcon(day.weather)}</div>
-                    <p><strong>Temp. Min :</strong> ${day.tmin}°C</p>
-                    <p><strong>Temp. Max :</strong> ${day.tmax}°C</p>
-                    <p><strong>Pluie :</strong> ${day.probarain ?? "N/A"}%</p>
-                </div>
-            `)
-            .join("");
+        // Génération du titre et des cartes météo
+        weatherResultContainer.innerHTML = `
+            <h1>Météo de ${cityName} pour ${days} jour${days > 1 ? "s" : ""}</h1>
+            <div class="weather-cards-container">
+                ${weatherData.forecast
+                    .slice(0, days) // Limite au nombre de jours sélectionnés
+                    .map((day, index) => `
+                        <div class="weather-card">
+                            <h3>Jour ${index + 1}</h3>
+                            <div class="icon">${getWeatherIcon(day.weather)}</div>
+                            <p><strong>Temp. Min :</strong> ${day.tmin}°C</p>
+                            <p><strong>Temp. Max :</strong> ${day.tmax}°C</p>
+                            <p><strong>Pluie :</strong> ${day.probarain ?? "N/A"}%</p>
+                        </div>
+                    `)
+                    .join("")}
+            </div>
+        `;
+            
     } catch (error) {
         weatherResultContainer.innerHTML = "<p>Erreur lors de la récupération des données météo.</p>";
         console.error(error);
