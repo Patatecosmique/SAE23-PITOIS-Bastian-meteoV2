@@ -51,18 +51,21 @@ async function fetchWeatherData() {
     }
 }
 
-// Fonction pour obtenir une icône météo en fonction du code météo
+// Fonction pour obtenir une animation météo en fonction du code météo
 function getWeatherIcon(weatherCode) {
     const icons = {
-        0: "☀️", // Soleil
-        1: "🌤️", // Peu nuageux
-        2: "⛅", // Partiellement nuageux
-        3: "☁️", // Nuageux
-        4: "🌧️", // Pluie
-        5: "⛈️", // Orage
-        6: "❄️", // Neige
+        0: "sun.gif", // Soleil
+        1: "partly-cloudy-day.gif", // Peu nuageux
+        2: "cloudy.png", // Nuageux
+        3: "rain.gif", // Pluie
+        4: "light-drizzle.gif", // Bruine légère
+        5: "cloud-lightning.gif", // Orage
+        6: "snow.gif", // Neige
+        7: "windy-weather.gif", // Vent
     };
-    return icons[weatherCode] || "❓"; // Icône par défaut si le code est inconnu
+
+    const iconPath = icons[weatherCode] || "unknown.gif"; // Icône par défaut si le code est inconnu
+    return `<img src="./img/${iconPath}" alt="Météo animée" class="weather-icon" />`;
 }
 
 // Fonction pour mettre à jour l'étiquette du curseur
