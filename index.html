@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Météo par Code Postal</title>
+    <meta name="description" content="Obtenez la météo actuelle pour un code postal français." />
+    <!-- Lien vers le fichier CSS externe -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <!-- Lien vers le fichier JavaScript externe -->
+    <script src="/js/script.js" defer></script>
+</head>
+
+<body>
+    <main role="main">
+        <!-- Titre principal de la page -->
+        <h1 id="page-title">Météo par Code Postal</h1>
+
+        <!-- Formulaire pour entrer un code postal -->
+        <form aria-labelledby="page-title" onsubmit="event.preventDefault(); fetchWeatherData();" role="search">
+            <label for="postal-code">Code postal :</label>
+            <input 
+                type="text" 
+                id="postal-code" 
+                name="postal-code" 
+                required 
+                pattern="[0-9]{5}" 
+                inputmode="numeric" 
+                placeholder="Ex : 75001" 
+            />
+            <small id="postal-code-help">Entrez un code postal français à 5 chiffres.</small>
+            <button type="submit">Obtenir la météo</button>
+        </form>
+
+        <!-- Section où les résultats de la météo seront affichés -->
+        <section id="weather-result" class="result" aria-live="polite"></section>
+    </main>
+</body>
+
+</html>
